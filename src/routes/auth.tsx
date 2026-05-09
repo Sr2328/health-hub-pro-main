@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { Activity, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Stethoscope, Eye, EyeOff, ChevronLeft, ChevronRight, Star, Activity, Shield, Users, Clock } from "lucide-react";
+import { Stethoscope, Eye, EyeOff, Users, Shield, Clock } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/auth")({
@@ -52,17 +52,10 @@ function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [testimonialIdx, setTestimonialIdx] = useState(0);
 
   useEffect(() => {
     if (user) navigate({ to: "/" });
   }, [user, navigate]);
-
-  // auto-advance testimonials
-  useEffect(() => {
-    const t = setInterval(() => setTestimonialIdx((i) => (i + 1) % TESTIMONIALS.length), 6000);
-    return () => clearInterval(t);
-  }, []);
 
   const signIn = async () => {
     if (!email || !password) return toast.error("Please fill in all fields");
@@ -92,7 +85,6 @@ function AuthPage() {
   };
 
   const active = tab === "signin" ? signIn : signUp;
-  const testimonial = TESTIMONIALS[testimonialIdx];
 
   return (
     <div
@@ -299,7 +291,7 @@ function AuthPage() {
 
         {/* ── RIGHT: hero panel ─────────────────────────────────────── */}
         <div
-          className="hidden lg:flex flex-col justify-between flex-1 p-10"
+          className="hidden lg:flex flex-col flex-1"
           style={{
             background: "linear-gradient(145deg, #1a4fc4 0%, #0f2d6b 60%, #081840 100%)",
             position: "relative",
@@ -332,126 +324,36 @@ function AuthPage() {
             }}
           />
 
-          {/* headline */}
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <h2
-              className="font-extrabold leading-tight"
-              style={{ fontSize: 36, color: "#ffffff", letterSpacing: "-0.03em" }}
-            >
-              Delivering Care,
-              <br />
-              <span style={{ color: "#7eb3ff" }}>Powered by Data</span>
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed" style={{ color: "#8baee0", maxWidth: 280 }}>
-              Metro Multifacility Hospital's integrated HMS — connecting patients, doctors, and operations in one platform.
-            </p>
-
-            {/* stats row */}
-            <div className="grid grid-cols-2 gap-3 mt-8">
-              {STATS.map(({ icon: Icon, label, value }) => (
-                <div
-                  key={label}
-                  className="flex items-center gap-3 rounded-xl p-3"
-                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.10)" }}
-                >
-                  <div
-                    className="flex items-center justify-center rounded-lg"
-                    style={{ width: 32, height: 32, background: "rgba(255,255,255,0.12)", flexShrink: 0 }}
-                  >
-                    <Icon style={{ width: 16, height: 16, color: "#7eb3ff" }} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm" style={{ color: "#ffffff" }}>{value}</p>
-                    <p className="text-[11px]" style={{ color: "#7a9fc7" }}>{label}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* testimonial card */}
+          {/* ── doctor image ──────────────────────────────────────────── */}
           <div
-            className="rounded-2xl p-5 mt-8"
             style={{
-              background: "rgba(255,255,255,0.09)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              position: "relative",
-              zIndex: 1,
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              zIndex: 2,
+              pointerEvents: "none",
+              userSelect: "none",
             }}
           >
-            {/* stars */}
-            <div className="flex gap-1 mb-3">
-              {Array.from({ length: testimonial.rating }).map((_, i) => (
-                <Star key={i} style={{ width: 14, height: 14, fill: "#f59e0b", color: "#f59e0b" }} />
-              ))}
-            </div>
-
-            <p className="text-sm leading-relaxed mb-4" style={{ color: "#c8daf5" }}>
-              "{testimonial.text}"
-            </p>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold" style={{ color: "#ffffff" }}>{testimonial.name}</p>
-                <p className="text-xs" style={{ color: "#7a9fc7" }}>{testimonial.role}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() =>
-                    setTestimonialIdx((i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)
-                  }
-                  className="flex items-center justify-center rounded-full"
-                  style={{
-                    width: 30,
-                    height: 30,
-                    background: "rgba(255,255,255,0.12)",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    cursor: "pointer",
-                    color: "#c8daf5",
-                  }}
-                  aria-label="Previous testimonial"
-                >
-                  <ChevronLeft style={{ width: 14, height: 14 }} />
-                </button>
-                <button
-                  onClick={() => setTestimonialIdx((i) => (i + 1) % TESTIMONIALS.length)}
-                  className="flex items-center justify-center rounded-full"
-                  style={{
-                    width: 30,
-                    height: 30,
-                    background: "rgba(255,255,255,0.12)",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    cursor: "pointer",
-                    color: "#c8daf5",
-                  }}
-                  aria-label="Next testimonial"
-                >
-                  <ChevronRight style={{ width: 14, height: 14 }} />
-                </button>
-              </div>
-            </div>
-
-            {/* dots */}
-            <div className="flex gap-1.5 mt-3">
-              {TESTIMONIALS.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setTestimonialIdx(i)}
-                  style={{
-                    width: i === testimonialIdx ? 18 : 6,
-                    height: 6,
-                    borderRadius: 99,
-                    background: i === testimonialIdx ? "#7eb3ff" : "rgba(255,255,255,0.25)",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0,
-                    transition: "width 0.3s ease, background 0.3s ease",
-                  }}
-                  aria-label={`Testimonial ${i + 1}`}
-                />
-              ))}
-            </div>
+            <img
+              src="https://i.postimg.cc/wTp76dYk/dr.png"
+              alt="Doctor"
+              style={{
+                height: "100%",
+                width: "100%",
+                objectFit: "contain",
+                objectPosition: "bottom center",
+                filter: "drop-shadow(0 12px 32px rgba(0,0,0,0.45))",
+              }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
           </div>
+
+
         </div>
       </div>
     </div>

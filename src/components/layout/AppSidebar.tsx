@@ -2,7 +2,8 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Users, ClipboardList, Calendar, FlaskConical,
   Pill, Bed, Receipt, FileBarChart, Settings, LogOut, Stethoscope,
-  Building2, ScanLine, FileText
+  Building2, ScanLine, FileText,
+  IndianRupeeIcon
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -22,7 +23,7 @@ const ops = [
   { title: "Prescriptions", url: "/prescriptions", icon: FileText },
   { title: "Pharmacy", url: "/pharmacy", icon: Pill },
   { title: "Beds (IPD)", url: "/beds", icon: Bed },
-  { title: "Billing", url: "/billing", icon: Receipt },
+  { title: "Billing", url: "/billing", icon: IndianRupeeIcon },
 ];
 const admin = [
   { title: "Reports", url: "/reports", icon: FileBarChart },
@@ -66,8 +67,8 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div className="leading-tight">
-              <div className="font-bold text-base">MET CITY <br />
-                HOSPITAL</div>
+              <div className="font-bold text-base"> METRO MULTIFACILITY  <br />
+                HOSPITAL- HMS</div>
               <div className="text-[10px] text-muted-foreground">HMS</div>
             </div>
           )}
