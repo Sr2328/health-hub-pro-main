@@ -938,7 +938,7 @@ export function OpdPage() {
                   </div>
                   <div>
                     <p className="text-[10px] text-muted-foreground font-medium mb-0.5">Doctor</p>
-                    <p className="font-semibold text-slate-700">Dr. {firstWaiting.doctors?.name ?? "—"}</p>
+                    <p className="font-semibold text-slate-700">Dr. {(firstWaiting as any).doctors?.name ?? "—"}</p>
                   </div>
                   <div>
                     <p className="text-[10px] text-muted-foreground font-medium mb-0.5">Chief Complaint</p>
